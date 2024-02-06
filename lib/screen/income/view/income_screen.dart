@@ -96,13 +96,13 @@ class _IncomeScreenState extends State<IncomeScreen> {
                     Text("01:30 PM"),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ElevatedButton(
+                    ElevatedButton(style: ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) => Colors.green)),
                       onPressed: () {
                         DBModel model = DBModel(
                             title: txtTitle.text,
@@ -114,9 +114,9 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             time: "12:00");
                         DbHelper.helper.insertData(model);
                       },
-                      child: const Text("Income"),
+                      child: const Text("Income",style: TextStyle(color: Colors.white),),
                     ),
-                    ElevatedButton(
+                    ElevatedButton(style: ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) => Colors.red)),
                       onPressed: () {
                         DBModel model = DBModel(
                             title: txtTitle.text,
@@ -128,7 +128,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             time: "12:00");
                         DbHelper.helper.insertData(model);
                       },
-                      child: const Text("Expense"),
+                      child: const Text("Expense",style: TextStyle(color: Colors.white),),
                     ),
                   ],
                 ),
