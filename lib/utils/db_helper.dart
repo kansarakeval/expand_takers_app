@@ -6,6 +6,7 @@ import 'package:sqflite/sqflite.dart';
 
 class DbHelper {
   static DbHelper helper = DbHelper._();
+
   DbHelper._();
 
   Database? database;
@@ -49,9 +50,30 @@ class DbHelper {
     });
   }
 
-  void readData() {}
+  Future<void> insertCategoryData({required String name}) async {
+    database = await checkDB();
+    database!.insert("category", {"name":name});
+  }
+
+  Future<List<Map>> readCategoryData() async {
+    database = await checkDB();
+    String query ="SELECT * FROM category";
+    List<Map> data =await database!.rawQuery(query,null);
+    return data;
+  }
+
+  Future<List<DBModel>> readInconmeExpense() async {
+    database = await checkDB();
+    String query = "SELECT * FROM incomeExpense";
+    List<Map> data =await database!.rawQuery(query,null);
+   List<DBModel> modelList= data.map((e) => DBModel.mapToModel(e)).toList();
+   return modelList;
+  }
 
   void updateData() {}
 
-  void deleteData() {}
+  Future<void> deleteCategoryData({required String id}) async {
+    database = await checkDB();
+    database!.delete("category",where: "id=?",whereArgs: [id]);
+  }
 }

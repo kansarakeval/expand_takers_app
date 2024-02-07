@@ -1,3 +1,4 @@
+import 'package:expand_takers_app/screen/category/view/category_screen.dart';
 import 'package:expand_takers_app/screen/dash/view/dash_screen.dart';
 import 'package:expand_takers_app/screen/graph/view/graph_Screen.dart';
 import 'package:expand_takers_app/screen/home/view/home_Screen.dart';
@@ -11,4 +12,5 @@ Map<String, WidgetBuilder> app_routes = {
   'graph': (context) => const GraphScreen(),
   'setting': (context) => const SettingScreen(),
   'income': (context) => const IncomeScreen(),
+  'category': (context) => const CategoryScreen(),
 };

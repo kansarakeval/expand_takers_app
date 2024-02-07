@@ -1,6 +1,8 @@
+import 'package:expand_takers_app/screen/category/controller/category_controller.dart';
 import 'package:expand_takers_app/screen/model/db_model.dart';
 import 'package:expand_takers_app/utils/db_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class IncomeScreen extends StatefulWidget {
   const IncomeScreen({super.key});
@@ -13,7 +15,14 @@ class _IncomeScreenState extends State<IncomeScreen> {
   TextEditingController txtTitle = TextEditingController();
   TextEditingController txtAmount = TextEditingController();
   TextEditingController txtNotes = TextEditingController();
-  TextEditingController txtCatagary = TextEditingController();
+
+  CategoryController controller = Get.put(CategoryController());
+
+  @override
+  void initState() {
+    super.initState();
+    controller.getController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,18 +71,21 @@ class _IncomeScreenState extends State<IncomeScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                TextFormField(
-                  controller: txtCatagary,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    label: Text("Category"),
+                Obx(
+                  ()=> DropdownButton(
+                    value: controller.selectCategory.value,
+                    hint: Text("selected"),
+                    isExpanded: true,
+                    items:
+                        controller.categoryList.map((e) => DropdownMenuItem(
+                              child: Text(e['name']),
+                              value: "${e['name']}",
+                            )
+                        ).toList(),
+                    onChanged: (value) {
+                      controller.selectCategory.value = value as String;
+                    },
                   ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "pleas enter the title";
-                    }
-                    return null;
-                  },
                 ),
                 const SizedBox(
                   height: 10,
@@ -102,33 +114,45 @@ class _IncomeScreenState extends State<IncomeScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ElevatedButton(style: ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) => Colors.green)),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateColor.resolveWith(
+                              (states) => Colors.green)),
                       onPressed: () {
                         DBModel model = DBModel(
                             title: txtTitle.text,
                             amount: txtAmount.text,
-                            category: txtCatagary.text,
+                            category: controller.selectCategory.value,
                             notes: txtNotes.text,
                             status: "0",
                             date: "06/02/2024",
                             time: "12:00");
                         DbHelper.helper.insertData(model);
                       },
-                      child: const Text("Income",style: TextStyle(color: Colors.white),),
+                      child: const Text(
+                        "Income",
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
-                    ElevatedButton(style: ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) => Colors.red)),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateColor.resolveWith(
+                              (states) => Colors.red)),
                       onPressed: () {
                         DBModel model = DBModel(
                             title: txtTitle.text,
                             amount: txtAmount.text,
-                            category: txtCatagary.text,
+                            category: controller.selectCategory.value,
                             notes: txtNotes.text,
                             status: "1",
                             date: "06/02/2024",
                             time: "12:00");
                         DbHelper.helper.insertData(model);
                       },
-                      child: const Text("Expense",style: TextStyle(color: Colors.white),),
+                      child: const Text(
+                        "Expense",
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ],
                 ),
