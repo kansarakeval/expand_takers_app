@@ -128,6 +128,8 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             date: "06/02/2024",
                             time: "12:00");
                         DbHelper.helper.insertData(model);
+                        controller.getController();
+                        Get.back();
                       },
                       child: const Text(
                         "Income",
@@ -148,6 +150,8 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             date: "06/02/2024",
                             time: "12:00");
                         DbHelper.helper.insertData(model);
+                        controller.getController();
+                        Get.back();
                       },
                       child: const Text(
                         "Expense",
