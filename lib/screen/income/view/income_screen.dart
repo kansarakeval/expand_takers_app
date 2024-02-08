@@ -27,7 +27,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
     controller.getController();
     homeController.getHomeData();
 
-    if(updbModel!=null){
+    if (updbModel != null) {
       txtTitle = TextEditingController(text: updbModel!.title);
       txtAmount = TextEditingController(text: updbModel!.amount);
       txtNotes = TextEditingController(text: updbModel!.notes);
@@ -83,16 +83,16 @@ class _IncomeScreenState extends State<IncomeScreen> {
                   height: 10,
                 ),
                 Obx(
-                  ()=> DropdownButton(
+                  () => DropdownButton(
                     value: controller.selectCategory.value,
                     hint: Text("selected"),
                     isExpanded: true,
-                    items:
-                        controller.categoryList.map((e) => DropdownMenuItem(
+                    items: controller.categoryList
+                        .map((e) => DropdownMenuItem(
                               child: Text(e['name']),
                               value: "${e['name']}",
-                            )
-                        ).toList(),
+                            ))
+                        .toList(),
                     onChanged: (value) {
                       controller.selectCategory.value = value as String;
                     },
@@ -131,7 +131,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                               (states) => Colors.green)),
                       onPressed: () {
                         DBModel model = DBModel(
-                          id: updbModel!.id,
+                            id: updbModel?.id,
                             title: txtTitle.text,
                             amount: txtAmount.text,
                             category: controller.selectCategory.value,
@@ -140,10 +140,9 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             date: "06/02/2024",
                             time: "12:00");
 
-                        if(updbModel==null){
+                        if (updbModel == null) {
                           DbHelper.helper.insertData(model);
-                        }
-                        else{
+                        } else {
                           DbHelper.helper.updateincomeExpenseData(model);
                         }
 
@@ -170,10 +169,9 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             date: "06/02/2024",
                             time: "12:00");
 
-                        if(updbModel==null){
+                        if (updbModel == null) {
                           DbHelper.helper.insertData(model);
-                        }
-                        else{
+                        } else {
                           DbHelper.helper.updateincomeExpenseData(model);
                         }
                         homeController.getHomeData();
