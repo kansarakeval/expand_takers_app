@@ -1,4 +1,5 @@
 import 'package:expand_takers_app/screen/category/controller/category_controller.dart';
+import 'package:expand_takers_app/screen/home/controller/home_controller.dart';
 import 'package:expand_takers_app/screen/model/db_model.dart';
 import 'package:expand_takers_app/utils/db_helper.dart';
 import 'package:flutter/material.dart';
@@ -12,16 +13,26 @@ class IncomeScreen extends StatefulWidget {
 }
 
 class _IncomeScreenState extends State<IncomeScreen> {
+  DBModel? updbModel = Get.arguments;
   TextEditingController txtTitle = TextEditingController();
   TextEditingController txtAmount = TextEditingController();
   TextEditingController txtNotes = TextEditingController();
 
   CategoryController controller = Get.put(CategoryController());
+  HomeController homeController = Get.put(HomeController());
 
   @override
   void initState() {
     super.initState();
     controller.getController();
+    homeController.getHomeData();
+
+    if(updbModel!=null){
+      txtTitle = TextEditingController(text: updbModel!.title);
+      txtAmount = TextEditingController(text: updbModel!.amount);
+      txtNotes = TextEditingController(text: updbModel!.notes);
+      controller.selectCategory.value = updbModel!.category;
+    }
   }
 
   @override
@@ -120,6 +131,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                               (states) => Colors.green)),
                       onPressed: () {
                         DBModel model = DBModel(
+                          id: updbModel!.id,
                             title: txtTitle.text,
                             amount: txtAmount.text,
                             category: controller.selectCategory.value,
@@ -127,9 +139,16 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             status: "0",
                             date: "06/02/2024",
                             time: "12:00");
-                        DbHelper.helper.insertData(model);
-                        controller.getController();
-                        Get.back();
+
+                        if(updbModel==null){
+                          DbHelper.helper.insertData(model);
+                        }
+                        else{
+                          DbHelper.helper.updateincomeExpenseData(model);
+                        }
+
+                        homeController.getHomeData();
+                        Get.offAllNamed('/');
                       },
                       child: const Text(
                         "Income",
@@ -142,6 +161,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                               (states) => Colors.red)),
                       onPressed: () {
                         DBModel model = DBModel(
+                            id: updbModel!.id,
                             title: txtTitle.text,
                             amount: txtAmount.text,
                             category: controller.selectCategory.value,
@@ -149,9 +169,15 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             status: "1",
                             date: "06/02/2024",
                             time: "12:00");
-                        DbHelper.helper.insertData(model);
-                        controller.getController();
-                        Get.back();
+
+                        if(updbModel==null){
+                          DbHelper.helper.insertData(model);
+                        }
+                        else{
+                          DbHelper.helper.updateincomeExpenseData(model);
+                        }
+                        homeController.getHomeData();
+                        Get.offAllNamed('/');
                       },
                       child: const Text(
                         "Expense",

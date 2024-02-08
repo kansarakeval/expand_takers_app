@@ -40,28 +40,56 @@ class _HomeScreenState extends State<HomeScreen> {
           () => ListView.builder(
             itemCount: controller.incomeExpenseList.length,
             itemBuilder: (context, index) {
-              return Container(
-                padding: const EdgeInsets.all(10),
-                margin: const EdgeInsets.all(5),
-                width: double.infinity,
-                height: MediaQuery.sizeOf(context).height * 0.10,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.grey.shade200),
-                child: Row(
-                  children: [
-                    Text(
-                      "${controller.incomeExpenseList[index].title}",
-                      style:
-                          const TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
-                    ),
-                    const Spacer(),
-                    Text(
-                      "${controller.incomeExpenseList[index].amount}",
-                      style:
-                          TextStyle(color: controller.incomeExpenseList[index].status=="0"?Colors.green:Colors.red,fontSize: 19, fontWeight: FontWeight.bold),
-                    ),
-                  ],
+              return InkWell(
+                onTap: () {
+                  Get.toNamed('detail', arguments: controller.incomeExpenseList[index]);
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  margin: const EdgeInsets.all(5),
+                  height: 75,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                    boxShadow: [BoxShadow(color: Colors.black12,spreadRadius: 1)]
+                  ),
+                  child: Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "${controller.incomeExpenseList[index].title}",
+                            style:
+                                const TextStyle(fontSize: 20),
+                          ),
+                          SizedBox(height: 5,),
+                          Text(
+                            "${controller.incomeExpenseList[index].date}",
+                            style:
+                                const TextStyle(fontSize: 15,color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                      const Spacer(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "${controller.incomeExpenseList[index].amount}",
+                            style:
+                                TextStyle(color: controller.incomeExpenseList[index].status=="0"?Colors.green:Colors.red,fontSize: 19, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 5,),
+                          Text(
+                            "${controller.incomeExpenseList[index].time}",
+                            style:
+                                TextStyle(color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               );
             },

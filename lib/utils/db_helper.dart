@@ -52,28 +52,44 @@ class DbHelper {
 
   Future<void> insertCategoryData({required String name}) async {
     database = await checkDB();
-    database!.insert("category", {"name":name});
+    database!.insert("category", {"name": name});
   }
 
   Future<List<Map>> readCategoryData() async {
     database = await checkDB();
-    String query ="SELECT * FROM category";
-    List<Map> data =await database!.rawQuery(query,null);
+    String query = "SELECT * FROM category";
+    List<Map> data = await database!.rawQuery(query, null);
     return data;
   }
 
   Future<List<DBModel>> readInconmeExpense() async {
     database = await checkDB();
     String query = "SELECT * FROM incomeExpense";
-    List<Map> data =await database!.rawQuery(query,null);
-   List<DBModel> modelList= data.map((e) => DBModel.mapToModel(e)).toList();
-   return modelList;
+    List<Map> data = await database!.rawQuery(query, null);
+    List<DBModel> modelList = data.map((e) => DBModel.mapToModel(e)).toList();
+    return modelList;
   }
 
-  void updateData() {}
+  Future<void> updateincomeExpenseData(DBModel model) async {
+    database = await checkDB();
+    database!.update("incomeExpense", {
+      "title": model.title,
+      "amount": model.amount,
+      "category": model.category,
+      "notes": model.notes,
+      "time": model.time,
+      "date": model.date,
+      "status": model.status
+    },where: "id",whereArgs: [model.id]);
+  }
 
   Future<void> deleteCategoryData({required String id}) async {
     database = await checkDB();
-    database!.delete("category",where: "id=?",whereArgs: [id]);
+    database!.delete("category", where: "id=?", whereArgs: [id]);
+  }
+
+  Future<void> deleteincomeExpenseData({required String id}) async {
+    database = await checkDB();
+    database!.delete("incomeExpense", where: "id=?", whereArgs: [id]);
   }
 }
