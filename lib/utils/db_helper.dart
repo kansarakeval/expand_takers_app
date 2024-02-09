@@ -106,11 +106,12 @@ class DbHelper {
   }
 
   //search
-  Future<List<DBModel>> serchdincomeExpenseata({required String category}) async {
+  Future<List<DBModel>> filterIncomeExpenseata({required int status}) async {
     database = await checkDB();
-    String query = "SELECT * FROM incomeExpense where category= '$category'";
+    String query = "SELECT * FROM incomeExpense where status= '$status'";
     List<Map> data= await database!.rawQuery(query,null);
     List<DBModel> serchList = data.map((e) => DBModel.mapToModel(e)).toList();
     return serchList;
   }
+
 }

@@ -32,6 +32,12 @@ class _HomeScreenState extends State<HomeScreen> {
           actions: [
             IconButton(
               onPressed: () {
+                showFiletrDialog();
+              },
+              icon: const Icon(Icons.filter_list),
+            ),
+            IconButton(
+              onPressed: () {
                 Get.toNamed('category');
               },
               icon: const Icon(Icons.category),
@@ -156,5 +162,34 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+  
+  void showFiletrDialog(){
+    showDialog(context: context, builder: (context) {
+      return AlertDialog(
+        title: Text("Filter"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ActionChip(label: Text("All"),onPressed: () {
+                  Get.back();
+                },),
+                ActionChip(label: Text("Income"),onPressed: () {
+                  controller.filterData(0);
+                  Get.back();
+                }),
+                ActionChip(label: Text("Expense"),onPressed: () {
+                  controller.filterData(1);
+                  Get.back();
+                }),
+              ],
+            )
+          ],
+        ),
+      );
+    },);
   }
 }

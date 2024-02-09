@@ -32,6 +32,13 @@ class _IncomeScreenState extends State<IncomeScreen> {
       txtAmount = TextEditingController(text: updbModel!.amount);
       txtNotes = TextEditingController(text: updbModel!.notes);
       controller.selectCategory.value = updbModel!.category;
+
+      List date= updbModel!.date!.split('/');
+      homeController.date.value = DateTime(int.parse(date[2]),int.parse(date[1]),int.parse(date[0]));
+
+      List time= updbModel!.time!.split(':');
+      homeController.time.value = TimeOfDay(hour: int.parse(time[0]), minute: int.parse(time[1]));
+
     }
   }
 
@@ -112,11 +119,28 @@ class _IncomeScreenState extends State<IncomeScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Row(
                   children: [
-                    Text("05/02/2024"),
-                    Text("01:30 PM"),
+                    IconButton(
+                        onPressed: () async {
+                          DateTime? d1= await showDatePicker(
+                            context: context,
+                            firstDate: DateTime(2001),
+                            lastDate: DateTime(2050),
+                          );
+                          homeController.date.value =d1!;
+                        },
+                        icon: Icon(Icons.calendar_month)),
+                    Obx(() =>Text("${homeController.date.value.day}/${homeController.date.value.month}/${homeController.date.value.year}")),
+                    Spacer(),
+                    IconButton(
+                        onPressed: () async {
+                         TimeOfDay? t1= await showTimePicker(
+                              context: context, initialTime: TimeOfDay.now());
+                         homeController.time.value = t1!;
+                        },
+                        icon: Icon(Icons.watch_later_outlined)),
+                    Obx(() => Text("${homeController.time.value.hour}:${homeController.time.value.minute}"))
                   ],
                 ),
                 const SizedBox(
@@ -137,8 +161,8 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             category: controller.selectCategory.value,
                             notes: txtNotes.text,
                             status: "0",
-                            date: "06/02/2024",
-                            time: "12:00");
+                            date: "${homeController.date.value.day}/${homeController.date.value.month}/${homeController.date.value.year}",
+                            time: "${homeController.time.value.hour}:${homeController.time.value.minute}");
 
                         if (updbModel == null) {
                           DbHelper.helper.insertData(model);
@@ -166,8 +190,8 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             category: controller.selectCategory.value,
                             notes: txtNotes.text,
                             status: "1",
-                            date: "06/02/2024",
-                            time: "12:00");
+                            date: "${homeController.date.value.day}/${homeController.date.value.month}/${homeController.date.value.year}",
+                            time: "${homeController.time.value.hour}:${homeController.time.value.minute}");
 
                         if (updbModel == null) {
                           DbHelper.helper.insertData(model);
@@ -191,6 +215,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
       ),
     );
   }
+
   @override
   void dispose() {
     super.dispose();
