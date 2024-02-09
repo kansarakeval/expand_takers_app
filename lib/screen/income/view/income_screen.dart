@@ -160,7 +160,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                               (states) => Colors.red)),
                       onPressed: () {
                         DBModel model = DBModel(
-                            id: updbModel!.id,
+                            id: updbModel?.id,
                             title: txtTitle.text,
                             amount: txtAmount.text,
                             category: controller.selectCategory.value,
@@ -190,5 +190,10 @@ class _IncomeScreenState extends State<IncomeScreen> {
         ),
       ),
     );
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    controller.selectCategory.value = null;
   }
 }

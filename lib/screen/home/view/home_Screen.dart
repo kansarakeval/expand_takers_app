@@ -11,6 +11,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   HomeController controller = Get.put(HomeController());
+  //controller
+  TextEditingController txtsearch = TextEditingController();
 
   @override
   void initState() {
@@ -36,63 +38,114 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-        body: Obx(
-          () => ListView.builder(
-            itemCount: controller.incomeExpenseList.length,
-            itemBuilder: (context, index) {
-              return InkWell(
-                onTap: () {
-                  Get.toNamed('detail', arguments: controller.incomeExpenseList[index]);
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              SearchBar(
+                controller: txtsearch,
+                onChanged: (value) {
+                  // if(value.isEmpty){
+                  //   controller.getHomeData();
+                  // }
+                  if(value.isEmpty){
+                    controller.getHomeData();
+                  }
+                  else{
+                    controller.liveSearch(value);
+                  }
                 },
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  margin: const EdgeInsets.all(5),
-                  height: 75,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white,
-                    boxShadow: [BoxShadow(color: Colors.black12,spreadRadius: 1)]
-                  ),
-                  child: Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "${controller.incomeExpenseList[index].title}",
-                            style:
-                                const TextStyle(fontSize: 20),
+                trailing: const [
+                  // IconButton(
+                  //   onPressed: () {
+                  //     controller.serchCategory = txtsearch.text;
+                  //     controller.getSearch();
+                  //   },
+                  //   icon: const Icon(Icons.search),
+                  // ),
+                  Icon(Icons.search)
+                ],
+                hintText: "Search",
+                backgroundColor: MaterialStateProperty.all(Colors.white),
+                elevation: MaterialStateProperty.all(1),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Obx(
+                () => Expanded(
+                  child: ListView.builder(
+                    itemCount: controller.incomeExpenseList.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+                          Get.toNamed('detail',
+                              arguments: controller.incomeExpenseList[index]);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          margin: const EdgeInsets.all(5),
+                          height: 75,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
+                              boxShadow: const [
+                                BoxShadow(
+                                    color: Colors.black12, spreadRadius: 1)
+                              ]),
+                          child: Row(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${controller.incomeExpenseList[index].title}",
+                                    style: const TextStyle(fontSize: 20),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "${controller.incomeExpenseList[index].date}",
+                                    style: const TextStyle(
+                                        fontSize: 15, color: Colors.grey),
+                                  ),
+                                ],
+                              ),
+                              const Spacer(),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${controller.incomeExpenseList[index].amount}",
+                                    style: TextStyle(
+                                        color: controller
+                                                    .incomeExpenseList[index]
+                                                    .status ==
+                                                "0"
+                                            ? Colors.green
+                                            : Colors.red,
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "${controller.incomeExpenseList[index].time}",
+                                    style: const TextStyle(color: Colors.grey),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                          SizedBox(height: 5,),
-                          Text(
-                            "${controller.incomeExpenseList[index].date}",
-                            style:
-                                const TextStyle(fontSize: 15,color: Colors.grey),
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "${controller.incomeExpenseList[index].amount}",
-                            style:
-                                TextStyle(color: controller.incomeExpenseList[index].status=="0"?Colors.green:Colors.red,fontSize: 19, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 5,),
-                          Text(
-                            "${controller.incomeExpenseList[index].time}",
-                            style:
-                                TextStyle(color: Colors.grey),
-                          ),
-                        ],
-                      ),
-                    ],
+                        ),
+                      );
+                    },
                   ),
                 ),
-              );
-            },
+              ),
+            ],
           ),
         ),
         floatingActionButton: FloatingActionButton(
