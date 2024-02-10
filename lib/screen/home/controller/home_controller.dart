@@ -13,9 +13,14 @@ class HomeController extends GetxController {
   Rx<DateTime> date = DateTime.now().obs;
   Rx<TimeOfDay> time = TimeOfDay.now().obs;
 
+  //total
+  RxInt totalIncome = 0.obs;
+  RxInt totalExpense = 0.obs;
+
   Future<void> getHomeData() async {
     homeList = await DbHelper.helper.readIncomeExpense();
     incomeExpenseList.value = homeList;
+    getTotalIncomeExpense();
   }
 
   //search
@@ -23,6 +28,19 @@ class HomeController extends GetxController {
     List<DBModel> s1 =
         await DbHelper.helper.filterIncomeExpenseata(status: status);
     incomeExpenseList.value = s1;
+  }
+
+  // total
+  void getTotalIncomeExpense() {
+    totalIncome.value=0;
+    totalExpense.value=0;
+    for (DBModel model in incomeExpenseList) {
+      if (model.status == "0") {
+        totalIncome = totalIncome + int.parse(model.amount!);
+      } else {
+        totalExpense = totalExpense + int.parse(model.amount!);
+      }
+    }
   }
 
   //live data
@@ -35,7 +53,6 @@ class HomeController extends GetxController {
     }
     incomeExpenseList.value = List.from(filterList);
   }
-
 
 //time
 }

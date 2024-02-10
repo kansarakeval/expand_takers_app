@@ -11,6 +11,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   HomeController controller = Get.put(HomeController());
+
   //controller
   TextEditingController txtsearch = TextEditingController();
 
@@ -54,10 +55,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   // if(value.isEmpty){
                   //   controller.getHomeData();
                   // }
-                  if(value.isEmpty){
+                  if (value.isEmpty) {
                     controller.getHomeData();
-                  }
-                  else{
+                  } else {
                     controller.liveSearch(value);
                   }
                 },
@@ -74,6 +74,73 @@ class _HomeScreenState extends State<HomeScreen> {
                 hintText: "Search",
                 backgroundColor: MaterialStateProperty.all(Colors.white),
                 elevation: MaterialStateProperty.all(1),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                      height: 150,
+                      decoration: BoxDecoration(
+                          color: Colors.green.shade300,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Income",
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                          Obx(
+                            () => Text(
+                              "₹ ${controller.totalIncome}",
+                              style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                      height: 150,
+                      decoration: BoxDecoration(
+                          color: Colors.red.shade300,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Expense",
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                          Obx(
+                             () => Text(
+                              "₹ ${controller.totalExpense}",
+                              style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(
                 height: 10,
@@ -163,33 +230,43 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-  
-  void showFiletrDialog(){
-    showDialog(context: context, builder: (context) {
-      return AlertDialog(
-        title: Text("Filter"),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ActionChip(label: Text("All"),onPressed: () {
-                  Get.back();
-                },),
-                ActionChip(label: Text("Income"),onPressed: () {
-                  controller.filterData(0);
-                  Get.back();
-                }),
-                ActionChip(label: Text("Expense"),onPressed: () {
-                  controller.filterData(1);
-                  Get.back();
-                }),
-              ],
-            )
-          ],
-        ),
-      );
-    },);
+
+  void showFiletrDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Filter"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ActionChip(
+                    label: const Text("All"),
+                    onPressed: () {
+                      Get.back();
+                    },
+                  ),
+                  ActionChip(
+                      label: const Text("Income"),
+                      onPressed: () {
+                        controller.filterData(0);
+                        Get.back();
+                      }),
+                  ActionChip(
+                      label: const Text("Expense"),
+                      onPressed: () {
+                        controller.filterData(1);
+                        Get.back();
+                      }),
+                ],
+              )
+            ],
+          ),
+        );
+      },
+    );
   }
 }
